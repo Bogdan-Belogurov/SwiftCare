@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
 
-    @State private var dateSelected: DateComponents?
     @State private var displayEvents = false
 
     let events: [Event] = [
@@ -29,6 +28,8 @@ struct ContentView: View {
 
     @State
     private var date = Date()
+    @State
+    private var calendarIsPresented = false
     private let hourWidth = 150.0
 
     var body: some View {
@@ -36,27 +37,10 @@ struct ContentView: View {
             let height = proxy.size.height * 0.45
             ScrollView {
                 VStack(alignment: .leading) {
-                    HStack {
-//                        CalendarView(
-//                            interval:  DateInterval(start: .distantPast, end: .distantFuture),
-//                            dateSelected: $dateSelected,
-//                            displayEvents: $displayEvents
-//                        )
-//                        .background(.white)
-//                        .tint(.cyan)
-//                        .cornerRadius(16)
-//                        .shadow(color: .black.opacity(0.2), radius: 2)
-//                        .padding(.leading)
-//                        .padding(.top)
-
+                    Button {
+                        calendarIsPresented.toggle()
+                    } label: {
                         VStack(alignment: .leading) {
-                            DatePicker(
-                                "Start Date",
-                                selection: $date,
-                                displayedComponents: [.date]
-                            )
-                            .datePickerStyle(.compact)
-
                             HStack {
                                 Text(date.formatted(.dateTime.day().month()))
                                     .bold()
@@ -64,114 +48,120 @@ struct ContentView: View {
                             }
                             .font(.title)
                             Text(date.formatted(.dateTime.weekday(.wide)))
+                        }
+                        .tint(.black.opacity(0.8))
+                    }
+                    .popover(isPresented: $calendarIsPresented) {
+                        CalendarView(
+                            interval:  DateInterval(start: .distantPast, end: .distantFuture),
+                            date: $date,
+                            displayEvents: $displayEvents
+                        )
+                        .background(.white)
+                        .tint(.cyan)
+                    }
 
-                            HStack(alignment: .center, spacing: 8) {
+                    HStack(alignment: .center, spacing: 8) {
+                        VStack(alignment: .leading) {
+                            Group {
                                 VStack(alignment: .leading) {
-                                    Group {
-                                        VStack(alignment: .leading) {
-                                            Text("1 Machine")
-                                            Text("Load: 45%").bold()
-                                        }
-                                        VStack(alignment: .leading) {
-                                            Text("1 Machine")
-                                            Text("Load: 45%").bold()
-                                        }
-                                        VStack(alignment: .leading) {
-                                            Text("1 Machine")
-                                            Text("Load: 45%").bold()
-                                        }
-                                        VStack(alignment: .leading) {
-                                            Text("1 Machine")
-                                            Text("Load: 45%").bold()
-                                        }
-                                        VStack(alignment: .leading) {
-                                            Text("1 Machine")
-                                            Text("Load: 45%").bold()
-                                        }
-                                    }
-                                    .font(.callout)
-                                    .opacity(0.9)
-                                    .padding(4)
-//                                    .frame(width: width, alignment: .leading)
-//                                    .background(.teal.opacity(0.5))
-                                    .cornerRadius(8)
-                                    .shadow(color: .black.opacity(0.2), radius: 2)
+                                    Text("1 Machine")
+                                    Text("Load: 45%").bold()
                                 }
-                                Divider()
-
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    ZStack(alignment: .leading) {
-                                        HStack(alignment: .center, spacing: 0) {
-                                            ForEach(7..<19) { hour in
-                                                VStack {
-                                                    Text("\(hour):00")
-                                                        .font(.caption)
-                                                        .frame(width: hourWidth, alignment: .leading)
-                                                    //                                        R: 248
-                                                    //                                        G: 247
-                                                    //                                        B: 252
-                                                    Color(red: 0.0, green: 1.0, blue: 1.0).opacity(hour % 2 == 0 ? 0.1 : 0)
-                                                        .cornerRadius(16)
-                                                        .frame(width: hourWidth, height: height - 30)
-                                                }
-                                            }
-                                        }
-
-
-                                        VStack(alignment: .leading, spacing: 18) {
-                                            ZStack(alignment: .leading) {
-                                                ForEach(events) { event in
-                                                    eventCell(event)
-                                                }
-                                            }
-                                            ZStack(alignment: .leading) {
-                                                ForEach(events) { event in
-                                                    eventCell(event, colour: .red.opacity(0.5))
-                                                }
-                                            }
-                                            ZStack(alignment: .leading) {
-                                                ForEach(events) { event in
-                                                    eventCell(event, colour: .white)
-                                                }
-                                            }
-                                            ZStack(alignment: .leading) {
-                                                ForEach(events) { event in
-                                                    eventCell(event, colour: .green.opacity(0.5))
-                                                }
-                                            }
-
-                                            ZStack(alignment: .leading) {
-                                                ForEach(events) { event in
-                                                    eventCell(event)
-                                                }
-                                            }
-                                        }
-
-
-                                        ZStack {
-                                            Color.red.opacity(0.4)
-                                                .frame(width: 1, height: height)
-
-                                            VStack {
-                                                Circle()
-                                                    .fill(Color.red.opacity(0.4))
-                                                    .frame(width: 8, height: 8)
-                                            }
-                                        }
-                                        .offset(x: getCurrentTimeOffset(), y: 16)
-
-                                    }
+                                VStack(alignment: .leading) {
+                                    Text("1 Machine")
+                                    Text("Load: 45%").bold()
+                                }
+                                VStack(alignment: .leading) {
+                                    Text("1 Machine")
+                                    Text("Load: 45%").bold()
+                                }
+                                VStack(alignment: .leading) {
+                                    Text("1 Machine")
+                                    Text("Load: 45%").bold()
+                                }
+                                VStack(alignment: .leading) {
+                                    Text("1 Machine")
+                                    Text("Load: 45%").bold()
                                 }
                             }
-
-                            .frame(height: height)
-                            Spacer()
+                            .font(.callout)
+                            .opacity(0.8)
+                            .padding(4)
+                            .cornerRadius(8)
                         }
-                        .padding(.top)
-                        Spacer()
+                        Divider()
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            ZStack(alignment: .leading) {
+                                HStack(alignment: .center, spacing: 0) {
+                                    ForEach(7..<19) { hour in
+                                        VStack {
+                                            Text("\(hour):00")
+                                                .font(.caption)
+                                                .frame(width: hourWidth, alignment: .leading)
+                                            Color(red: 0.0, green: 1.0, blue: 1.0).opacity(hour % 2 == 0 ? 0.1 : 0)
+                                                .cornerRadius(16)
+                                                .frame(width: hourWidth, height: height - 30)
+                                        }
+                                    }
+                                }
+
+
+                                VStack(alignment: .leading, spacing: 18) {
+                                    ZStack(alignment: .leading) {
+                                        ForEach(events) { event in
+                                            eventCell(event)
+                                        }
+                                    }
+                                    ZStack(alignment: .leading) {
+                                        ForEach(events) { event in
+                                            eventCell(event, colour: .red.opacity(0.5))
+                                        }
+                                    }
+                                    ZStack(alignment: .leading) {
+                                        ForEach(events) { event in
+                                            eventCell(event, colour: .white)
+                                        }
+                                    }
+                                    ZStack(alignment: .leading) {
+                                        ForEach(events) { event in
+                                            eventCell(event, colour: .green.opacity(0.5))
+                                        }
+                                    }
+
+                                    ZStack(alignment: .leading) {
+                                        ForEach(events) { event in
+                                            eventCell(event)
+                                        }
+                                    }
+                                }
+
+                                if let timeOffset = getCurrentTimeOffset() {
+                                    ZStack {
+                                        Color.red.opacity(0.4)
+                                            .frame(width: 1, height: height)
+
+                                        VStack {
+                                            Circle()
+                                                .fill(Color.red.opacity(0.4))
+                                                .frame(width: 8, height: 8)
+                                        }
+                                    }
+                                    .offset(x: timeOffset, y: 16)
+                                }
+                            }
+                        }
                     }
+                    .frame(height: height)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(.white)
+                    )
                     Spacer()
                 }
+                .padding()
+                Spacer()
             }
         }
 
@@ -206,8 +196,11 @@ struct ContentView: View {
         return calendar.date(from: dateComponents) ?? .now
     }
 
-    func getCurrentTimeOffset() -> Double {
+    func getCurrentTimeOffset() -> Double? {
         let currentDate = Date()
+        let day = Calendar.current.component(.day, from: currentDate)
+        let selectedDay = Calendar.current.component(.day, from: date)
+        guard day == selectedDay else { return nil }
         let hour = Calendar.current.component(.hour, from: currentDate)
         let minute = Calendar.current.component(.minute, from: currentDate)
         return Double(8 - 7) * (hourWidth) + Double(minute/60) * hourWidth
@@ -223,7 +216,7 @@ struct ContentView_Previews: PreviewProvider {
 struct CalendarView: UIViewRepresentable {
     let interval: DateInterval
     //    @ObservedObject var eventStore: EventStore
-    @Binding var dateSelected: DateComponents?
+    @Binding var date: Date
     @Binding var displayEvents: Bool
 
     func makeUIView(context: Context) -> some UICalendarView {
@@ -279,13 +272,18 @@ struct CalendarView: UIViewRepresentable {
             //                icon.text = singleEvent.eventType.icon
             //                return icon
             //            }
-            return .default(color: [UIColor.red, .clear, .green , .orange].randomElement() ?? .clear)
+//            return .default(color: [UIColor.red, .clear, .green , .orange].randomElement() ?? .clear)
+            return .customView {
+                let label = UILabel()
+                label.text = ["🚨", "⚠️", ""].randomElement() ?? ""
+                return label
+            }
         }
 
         func dateSelection(_ selection: UICalendarSelectionSingleDate,
                            didSelectDate dateComponents: DateComponents?) {
-            parent.dateSelected = dateComponents
-            guard let dateComponents else { return }
+            guard let date = dateComponents?.date else { return }
+            parent.date = date
             //            let foundEvents = eventStore.events
             //                .filter {$0.date.startOfDay == dateComponents.date?.startOfDay}
             //            if !foundEvents.isEmpty {
@@ -297,11 +295,9 @@ struct CalendarView: UIViewRepresentable {
                            canSelectDate dateComponents: DateComponents?) -> Bool {
             return true
         }
-
     }
-
-
 }
+
 struct Event: Identifiable {
 
     let id = UUID()

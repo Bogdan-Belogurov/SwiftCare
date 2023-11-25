@@ -12,15 +12,15 @@ struct SwiftCareApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .onAppear {
-                    Task {
-                        let networking = NetworkService.shared
-                        try await networking.addAppointment(
-                            NewAppointmentData(name: "Vovan", cancerType: .lung, daysInRow: 10, patientID: UUID())
-                        )
-                        print(try await networking.getAppointments(from: .distantPast, to: .distantFuture))
-                    }
-                }
+//                .onAppear {
+//                    Task {
+//                        let networking = NetworkService.shared
+//                        try await networking.addAppointment(
+//                            NewAppointmentData(name: "Vovan", cancerType: .lung, daysInRow: 10, patientID: UUID())
+//                        )
+//                        print(try await networking.getAppointments(from: .distantPast, to: .distantFuture))
+//                    }
+//                }
         }
     }
 }
