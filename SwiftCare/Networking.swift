@@ -24,7 +24,7 @@ struct Appointment: Codable {
     }
 }
 
-enum CancerType: String, Codable {
+enum CancerType: String, Codable, Hashable, CaseIterable, CustomStringConvertible {
 
     case craniospinal
     case breast
@@ -36,6 +36,54 @@ enum CancerType: String, Codable {
     case lung
     case lungSpecial
     case wholeBrain
+
+    var description: String {
+        switch self {
+        case .craniospinal:
+            return "Craniospinal"
+        case .breast:
+            return "Breast"
+        case .breastSpecial:
+            return "Breast special"
+        case .headAndNeck:
+            return "Head and neck"
+        case .abdomen:
+            return "Abdomen"
+        case .pelvis:
+            return "Pelvis"
+        case .crane:
+            return "Crane"
+        case .lung:
+            return "Lung"
+        case .lungSpecial:
+            return "Lung special"
+        case .wholeBrain:
+            return "Whole brain"
+        }
+    }
+
+    var daysInRowOptions: [Int] {
+        switch self {
+        case .craniospinal:
+            return [13, 17, 20, 30]
+        case .breast, .breastSpecial:
+            return [15, 19, 25, 30]
+        case .headAndNeck:
+            return [5, 10, 15, 25, 30, 33, 35]
+        case .abdomen:
+            return [1, 3, 5, 8, 10, 12, 15, 18, 20, 30]
+        case .pelvis:
+            return [1, 3, 5, 10, 15, 22, 23, 25, 28, 35]
+        case .crane:
+            return [1, 5, 10, 13, 25, 30]
+        case .lung:
+            return [1, 5, 10, 15, 20, 25, 30, 33]
+        case .lungSpecial:
+            return [3, 5, 8]
+        case .wholeBrain:
+            return [5, 10, 12]
+        }
+    }
 }
 
 struct NewAppointmentData: Codable {

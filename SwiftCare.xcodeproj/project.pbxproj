@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B976E612B1298BA0095F6BD /* EventWizardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B976E602B1298BA0095F6BD /* EventWizardView.swift */; };
 		7BF1288F2B1286BF00791615 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF1288E2B1286BF00791615 /* Networking.swift */; };
 		B3540B2C2B128C2D00D7FBE6 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3540B2B2B128C2D00D7FBE6 /* ChartView.swift */; };
 		B39A037E2B123E4E00EB8A36 /* SwiftCareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39A037D2B123E4E00EB8A36 /* SwiftCareApp.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7B976E602B1298BA0095F6BD /* EventWizardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventWizardView.swift; sourceTree = "<group>"; };
 		7BF1288E2B1286BF00791615 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		B3540B2B2B128C2D00D7FBE6 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		B39A037A2B123E4E00EB8A36 /* SwiftCare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftCare.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,6 +60,7 @@
 				B39A037D2B123E4E00EB8A36 /* SwiftCareApp.swift */,
 				B39A037F2B123E4E00EB8A36 /* ContentView.swift */,
 				B3540B2B2B128C2D00D7FBE6 /* ChartView.swift */,
+				7B976E602B1298BA0095F6BD /* EventWizardView.swift */,
 				B39A03812B123E5000EB8A36 /* Assets.xcassets */,
 				B39A03832B123E5000EB8A36 /* Preview Content */,
 				7BF1288E2B1286BF00791615 /* Networking.swift */,
@@ -147,6 +150,7 @@
 				B39A03802B123E4E00EB8A36 /* ContentView.swift in Sources */,
 				B39A037E2B123E4E00EB8A36 /* SwiftCareApp.swift in Sources */,
 				B3540B2C2B128C2D00D7FBE6 /* ChartView.swift in Sources */,
+				7B976E612B1298BA0095F6BD /* EventWizardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
