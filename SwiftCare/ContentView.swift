@@ -30,141 +30,166 @@ struct ContentView: View {
     private var date = Date()
     @State
     private var calendarIsPresented = false
+    @State
+    private var wizardIsPresented = false
     private let hourWidth = 150.0
 
     var body: some View {
         GeometryReader { proxy in
             let height = proxy.size.height * 0.45
-            ScrollView {
-                VStack(alignment: .leading) {
-                    Button {
-                        calendarIsPresented.toggle()
-                    } label: {
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text(date.formatted(.dateTime.day().month()))
-                                    .bold()
-                                Text(date.formatted(.dateTime.year()))
+            NavigationStack {
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        Button {
+                            calendarIsPresented.toggle()
+                        } label: {
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text(date.formatted(.dateTime.day().month()))
+                                        .bold()
+                                    Text(date.formatted(.dateTime.year()))
+                                }
+                                .font(.title)
+                                Text(date.formatted(.dateTime.weekday(.wide)))
                             }
-                            .font(.title)
-                            Text(date.formatted(.dateTime.weekday(.wide)))
+                            .tint(.black.opacity(0.8))
                         }
-                        .tint(.black.opacity(0.8))
-                    }
-                    .popover(isPresented: $calendarIsPresented) {
-                        CalendarView(
-                            interval:  DateInterval(start: .distantPast, end: .distantFuture),
-                            date: $date,
-                            displayEvents: $displayEvents
+                        .popover(isPresented: $calendarIsPresented) {
+                            CalendarView(
+                                interval:  DateInterval(start: .distantPast, end: .distantFuture),
+                                date: $date,
+                                displayEvents: $displayEvents
+                            )
+                            .background(.white)
+                            .tint(.cyan)
+                        }
+
+                        HStack(alignment: .center, spacing: 8) {
+                            VStack(alignment: .leading) {
+                                Group {
+                                    VStack(alignment: .leading) {
+                                        Text("1 Machine")
+                                        Text("Load: 45%").bold()
+                                    }
+                                    VStack(alignment: .leading) {
+                                        Text("1 Machine")
+                                        Text("Load: 45%").bold()
+                                    }
+                                    VStack(alignment: .leading) {
+                                        Text("1 Machine")
+                                        Text("Load: 45%").bold()
+                                    }
+                                    VStack(alignment: .leading) {
+                                        Text("1 Machine")
+                                        Text("Load: 45%").bold()
+                                    }
+                                    VStack(alignment: .leading) {
+                                        Text("1 Machine")
+                                        Text("Load: 45%").bold()
+                                    }
+                                }
+                                .font(.callout)
+                                .opacity(0.8)
+                                .padding(4)
+                                .cornerRadius(8)
+                            }
+                            Divider()
+
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                ZStack(alignment: .leading) {
+                                    HStack(alignment: .center, spacing: 0) {
+                                        ForEach(7..<19) { hour in
+                                            VStack {
+                                                Text("\(hour):00")
+                                                    .font(.caption)
+                                                    .frame(width: hourWidth, alignment: .leading)
+                                                Color(red: 0.0, green: 1.0, blue: 1.0).opacity(hour % 2 == 0 ? 0.1 : 0)
+                                                    .cornerRadius(16)
+                                                    .frame(width: hourWidth, height: height - 30)
+                                            }
+                                        }
+                                    }
+
+
+                                    VStack(alignment: .leading, spacing: 18) {
+                                        ZStack(alignment: .leading) {
+                                            ForEach(events) { event in
+                                                eventCell(event)
+                                            }
+                                        }
+                                        ZStack(alignment: .leading) {
+                                            ForEach(events) { event in
+                                                eventCell(event, colour: .red.opacity(0.5))
+                                            }
+                                        }
+                                        ZStack(alignment: .leading) {
+                                            ForEach(events) { event in
+                                                eventCell(event, colour: .white)
+                                            }
+                                        }
+                                        ZStack(alignment: .leading) {
+                                            ForEach(events) { event in
+                                                eventCell(event, colour: .green.opacity(0.5))
+                                            }
+                                        }
+
+                                        ZStack(alignment: .leading) {
+                                            ForEach(events) { event in
+                                                eventCell(event)
+                                            }
+                                        }
+                                    }
+
+                                    if let timeOffset = getCurrentTimeOffset() {
+                                        ZStack {
+                                            Color.red.opacity(0.4)
+                                                .frame(width: 1, height: height)
+
+                                            VStack {
+                                                Circle()
+                                                    .fill(Color.red.opacity(0.4))
+                                                    .frame(width: 8, height: 8)
+                                            }
+                                        }
+                                        .offset(x: timeOffset, y: 16)
+                                    }
+                                }
+                            }
+                        }
+                        .frame(height: height)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(.white)
                         )
-                        .background(.white)
-                        .tint(.cyan)
+                        Spacer()
                     }
-
-                    HStack(alignment: .center, spacing: 8) {
-                        VStack(alignment: .leading) {
-                            Group {
-                                VStack(alignment: .leading) {
-                                    Text("1 Machine")
-                                    Text("Load: 45%").bold()
-                                }
-                                VStack(alignment: .leading) {
-                                    Text("1 Machine")
-                                    Text("Load: 45%").bold()
-                                }
-                                VStack(alignment: .leading) {
-                                    Text("1 Machine")
-                                    Text("Load: 45%").bold()
-                                }
-                                VStack(alignment: .leading) {
-                                    Text("1 Machine")
-                                    Text("Load: 45%").bold()
-                                }
-                                VStack(alignment: .leading) {
-                                    Text("1 Machine")
-                                    Text("Load: 45%").bold()
-                                }
-                            }
-                            .font(.callout)
-                            .opacity(0.8)
-                            .padding(4)
-                            .cornerRadius(8)
-                        }
-                        Divider()
-
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            ZStack(alignment: .leading) {
-                                HStack(alignment: .center, spacing: 0) {
-                                    ForEach(7..<19) { hour in
-                                        VStack {
-                                            Text("\(hour):00")
-                                                .font(.caption)
-                                                .frame(width: hourWidth, alignment: .leading)
-                                            Color(red: 0.0, green: 1.0, blue: 1.0).opacity(hour % 2 == 0 ? 0.1 : 0)
-                                                .cornerRadius(16)
-                                                .frame(width: hourWidth, height: height - 30)
-                                        }
-                                    }
-                                }
-
-
-                                VStack(alignment: .leading, spacing: 18) {
-                                    ZStack(alignment: .leading) {
-                                        ForEach(events) { event in
-                                            eventCell(event)
-                                        }
-                                    }
-                                    ZStack(alignment: .leading) {
-                                        ForEach(events) { event in
-                                            eventCell(event, colour: .red.opacity(0.5))
-                                        }
-                                    }
-                                    ZStack(alignment: .leading) {
-                                        ForEach(events) { event in
-                                            eventCell(event, colour: .white)
-                                        }
-                                    }
-                                    ZStack(alignment: .leading) {
-                                        ForEach(events) { event in
-                                            eventCell(event, colour: .green.opacity(0.5))
-                                        }
-                                    }
-
-                                    ZStack(alignment: .leading) {
-                                        ForEach(events) { event in
-                                            eventCell(event)
-                                        }
-                                    }
-                                }
-
-                                if let timeOffset = getCurrentTimeOffset() {
-                                    ZStack {
-                                        Color.red.opacity(0.4)
-                                            .frame(width: 1, height: height)
-
-                                        VStack {
-                                            Circle()
-                                                .fill(Color.red.opacity(0.4))
-                                                .frame(width: 8, height: 8)
-                                        }
-                                    }
-                                    .offset(x: timeOffset, y: 16)
-                                }
-                            }
-                        }
-                    }
-                    .frame(height: height)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(.white)
-                    )
+                    .padding()
                     Spacer()
                 }
-                .padding()
-                Spacer()
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            wizardIsPresented.toggle()
+                        } label: {
+                            HStack {
+                                Image(systemName: "plus")
+                                Text("Make new appointment")
+                            }
+                            .foregroundStyle(Color.white)
+                            .padding(.all, 8)
+                            .background(Color.purple)
+                            .cornerRadius(8)
+                        }
+                    }
+                }
+                .sheet(isPresented: $wizardIsPresented, onDismiss: {}) {
+                    NavigationStack {
+                        EventWizardView(isPresented: $wizardIsPresented)
+                    }
+                    .presentationDetents([.fraction(0.45)])
+                }
             }
         }
-
     }
 
     func eventCell(_ event: Event, colour: Color = .teal.opacity(0.5)) -> some View {
