@@ -9,6 +9,8 @@ import SwiftUI
 
 struct EventWizardView: View {
 
+    @EnvironmentObject var appointmentsStore: AppointmentsStore
+
     @Binding
     var isPresented: Bool
     @State
@@ -27,12 +29,14 @@ struct EventWizardView: View {
     var body: some View {
         Form {
             TextField("Appointment title", text: $name)
-            Picker("Cancer type", systemImage: "cross.fill", selection: $cancerType) {
+
+            Picker("Cancer type", selection: $cancerType) {
                 ForEach(CancerType.allCases, id: \.self) {
                     Text($0.description)
                 }
             }
-            Picker("Fraction", systemImage: "calendar", selection: $daysInRow) {
+
+            Picker("Fraction", selection: $daysInRow) {
                 ForEach(cancerType.daysInRowOptions, id: \.self) {
                     if $0 == 1 {
                         Text("\($0) day")
@@ -48,7 +52,7 @@ struct EventWizardView: View {
                 Task {
                     if canBeSaved {
                         appointmentIsSaving = true
-                        try await NetworkService.shared.addAppointment(
+                        try await appointmentsStore.createAppointments(
                             NewAppointmentData(
                                 name: name,
                                 cancerType: cancerType,
@@ -75,7 +79,7 @@ struct EventWizardView: View {
                 .frame(maxWidth: .infinity)
                 .cornerRadius(8)
             }
-            .background(canBeSaved ? .blue : .red)
+            .background(canBeSaved ? .blue.opacity(0.8) : .red.opacity(0.8))
             .cornerRadius(8)
             .padding()
         }

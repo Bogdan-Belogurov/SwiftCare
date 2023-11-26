@@ -9,18 +9,21 @@ import SwiftUI
 
 @main
 struct SwiftCareApp: App {
+
+    @StateObject var appointmentsStore = AppointmentsStore()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
-//                .onAppear {
-//                    Task {
-//                        let networking = NetworkService.shared
-//                        try await networking.addAppointment(
-//                            NewAppointmentData(name: "Vovan", cancerType: .lung, daysInRow: 10, patientID: UUID())
-//                        )
-//                        print(try await networking.getAppointments(from: .distantPast, to: .distantFuture))
-//                    }
-//                }
+                .environmentObject(appointmentsStore)
+                .onAppear {
+                    Task {
+                        try await appointmentsStore.fetchAppointments()
+                        try await UNUserNotificationCenter
+                            .current()
+                            .requestAuthorization(options:  [.alert, .badge, .sound])
+                    }
+                }
         }
     }
 }

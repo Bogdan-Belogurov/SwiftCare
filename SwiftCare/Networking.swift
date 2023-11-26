@@ -6,14 +6,35 @@
 //
 
 import Foundation
+import SwiftUI
 
-struct Appointment: Codable {
+struct Appointment: Codable, Identifiable {
 
     private(set) var id: UUID
     var name: String
     let startDate: Date
     let machineIndex: Int
     var patientID: UUID?
+
+    var endDate: Date {
+        return Calendar.current.date(byAdding: .minute, value: 30, to: startDate) ?? Date()
+    }
+
+    var colour: Color {
+        switch machineIndex {
+        case 0:
+            return .teal.opacity(0.5)
+        case 1:
+            return .red.opacity(0.5)
+        case 2:
+            return .white
+        case 3:
+            return .green.opacity(0.5)
+        default:
+            return .indigo.opacity(0.5)
+
+        }
+    }
 
     init(_ appointment: Appointment) {
         id = appointment.id
@@ -103,7 +124,7 @@ final class NetworkService {
     func getAppointments(from dateFrom: Date, to dateTo: Date) async throws -> [Appointment] {
         var urlComponents = URLComponents()
         urlComponents.scheme = "http"
-        urlComponents.host = "localhost"
+        urlComponents.host = "127.0.0.1"
         urlComponents.port = 8080
         urlComponents.path = "/api/events"
         urlComponents.queryItems = [
@@ -133,7 +154,7 @@ final class NetworkService {
     func addAppointment(_ newData: NewAppointmentData) async throws {
         var urlComponents = URLComponents()
         urlComponents.scheme = "http"
-        urlComponents.host = "localhost"
+        urlComponents.host = "127.0.0.1"
         urlComponents.port = 8080
         urlComponents.path = "/api/events"
         guard let url = urlComponents.url else {
